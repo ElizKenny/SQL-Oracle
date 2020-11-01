@@ -1,0 +1,70 @@
+SQL 
+Práctica 6
+
+1. 
+
+SELECT Last_name, Hide_date
+FROM Employees
+WHEN department_ID = (SELECT department_id
+				FROM Employees
+				WHEN Last_name =’&&Enter_last_name’)
+AND Last_name <> ‘&Enter_last_name’;
+
+2.
+
+SELECT Employee_ID, Last_name,
+FROOM Employees
+WHEN Salary > (SELECT AVG(Salary)
+			FROM Employees)
+ORDER BY Salary;
+
+3.
+
+SELECT employee_id, last_name
+FROM Employees
+WHEN department_id IN (SELECT Department_id
+				FROM Employees
+				WHEN last:name LIKE ‘%u%’);
+
+4.
+
+SELECT Last_name, Department_ID, Job_ID
+FROM Employees
+WHEN Department_id IN (SELECT Department_ID
+FROM Departments
+WHEN Location_id = 1700);
+
+4.2.
+
+SELECT Last_name, Department_ID, Job_ID
+FROM Employees
+WHEN Department_id IN (SELECT Department_ID
+FROM Departments
+WHEN Location_id = ‘&Enter_location’);
+
+5.
+
+SELECT last_name, salary
+FROM Employees
+WHEN manager_id = (SELECT employee_id 
+				FROM employees
+				WHEN last_name = ‘King’);
+(*acá duda por que el apellido debería venir der manager según entiendo la consulta pero no existe el parámetro… )
+
+6.
+
+SELECT department_id, last_name, job_id
+FROM employees
+WHEN department_id IN (SELECT department_id
+				FROM departments
+				WHEN department_name = ‘Executive’);
+
+7. 
+
+SELECT employee_id, last_name, salary
+FROM employees
+WHEN salary > (SELECT AVG(salary)
+			FROM employees)
+AND department_id IN (SELECT department_id
+			FROM employees
+			WHEN last_name LIKE ‘%u%’);
