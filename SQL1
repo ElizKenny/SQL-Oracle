@@ -1,0 +1,52 @@
+1)	Mostrar todos los empleados e indicar con las palabras "con comisión" en caso de recibir comisión y "sin comisión" caso contrario.
+2)	Mostrar los Clientes cuyo apellido finalice con n. Cree dos posibles soluciones.
+3)	Mostrar el número de localidad, el nombre de la ciudad y la cantidad de clientes en cada localidad.
+4)	Crear la tabla Clientes_CBA que contenga el nombre y apellido del cliente y la cantidad de veces que alquiló autos para todos los clientes de córdoba.
+5)	Borrar los empleados que tengan más de 10 años de antigüedad y los autos que ha alquilado.
+6)	Aumentar el precio de alquiler un 10.5% para los autos con una antigüedad menor a 2 años.
+
+1. 
+SELECT [ID_Empleado],
+  CASE Comisión
+    WHEN Comisión >1 THEN ‘Con Comisión’
+    ELSE 'Sin Comisión'
+  END
+from Empleados;
+
+2.
+SELECT [ID_Empleado], Nombre
+FROM Empleados
+WHERE Nombre LIKE ‘%n’;
+
+SELECT [ID_Empleado], Nombre
+FROM Empleados
+WHERE RIGHT(Nombre, 1) = ‘n’;
+
+
+3.
+SELECT Ciudad, [ID_Localidad], COUNT(ID_Cliente) 
+FROM Localidad L LEFT JOIN Clientes C ON(L.ID_Localidad = C.ID_Localidad)
+GROUP BY Ciudad, ID_Localidad;
+
+4. 
+INSERT INTO Clientes_CBA SELECT C.Nombre, C.Apellido, COUNT(ID_Alquiler)
+FROM Clientes C LEFT JOIN Alquiler A ON(C.ID_Cliente = A.ID_Cliente)LEFT JOIN Localidad L ON(L.ID_Localidad = C.ID_Localidad)
+WHERE L.Ciudad = ‘Córdoba’;
+GROUP BY C.Nombre, C.Apellido;
+
+5.
+DELETE FROM Alquiler 
+	WHERE ID_Empleado IN 
+(SELECT ID_Empleado 
+WHERE YEAR(Fecha_contratación) <= 2010);
+DELETE FROM Empleados
+WHERE YEAR(Fecha_contratación) <= 2010;
+
+
+
+6.
+ 
+UPDATE FROM Alquiler SET Precio_Alquiler = Precio_Alquiler * 0,105
+WHERE ID_Alquiler IN (SELECT ID_Alquiler FROM Alquiler A
+INNER JOIN Automóvil B ON (A.ID_Automovil = B.ID_Automovil)
+WHERE Año_Fabricación < YEAR(CURRENT_DATE)- 2);
